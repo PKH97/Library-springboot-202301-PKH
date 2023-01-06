@@ -4,6 +4,7 @@ import com.korit.library.aop.annotation.ValidAspect;
 import com.korit.library.exception.CustomValidationException;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
+import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.BeanPropertyBindingResult;
@@ -11,7 +12,7 @@ import org.springframework.validation.BeanPropertyBindingResult;
 import java.util.HashMap;
 import java.util.Map;
 
-@ValidAspect
+@Aspect
 @Component
 public class ValidationAop {
 
@@ -21,7 +22,6 @@ public class ValidationAop {
     @Around("pointCut()")
     public Object around(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
         Object[] args = proceedingJoinPoint.getArgs();
-
         BeanPropertyBindingResult bindingResult = null;
 
         for(Object arg : args){
