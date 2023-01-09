@@ -9,7 +9,7 @@ class RegisterApi {
             this.#instance = new RegisterApi();
         }
         return this.#instance;
-    }
+    } // -> 싱글톤 
 
     register(user) {
         $.ajax({
@@ -109,4 +109,3 @@ class User {
         this.email = email;
     }
 }
-
