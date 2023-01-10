@@ -5,6 +5,8 @@ import com.korit.library.repository.AccountRepository;
 import com.korit.library.web.dto.UserDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCrypt;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -18,6 +20,7 @@ public class AccountService {
     private AccountRepository accountRepository;
 
     public UserDto registerUser(UserDto userDto){
+        userDto.setPassword(new BCryptPasswordEncoder().encode(userDto.getPassword()));
         accountRepository.saveUser(userDto);
         accountRepository.saveRole(userDto);
         return userDto;
@@ -31,10 +34,6 @@ public class AccountService {
 
             throw new CustomValidationException(errorMap);
         }
-//        log.info("{}", user);
-//        log.info("{}", user.getRoleDtlDto());
-//        log.info("{}", user.getRoleDtlDto().get(0));
-//        log.info("{}", user.getRoleDtlDto().get(1));
     }
 
     public void compareToPassword(String password, String repassword){
