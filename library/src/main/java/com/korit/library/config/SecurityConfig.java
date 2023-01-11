@@ -31,13 +31,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
         http.httpBasic().disable(); //    ->기본적으로 제공하는 로그인 창을 없앰
         http.authorizeRequests()
                 .antMatchers("/mypage/**", "/security/**") // 인증이 필요하다.
-                .authenticated()
+                .authenticated() //인증 후 가려던 곳으로 이동해 준다
+                .antMatchers("/admin/**")
+                .hasRole("ADMIN") //ROLE_ADMIN, ROLE_MANAGER
                 .anyRequest()
                 .permitAll() // 위의 설정된 주소 외엔 필요 없음
                 .and()
                 .formLogin()
                 .loginPage("/account/login") //로그인 페이지 get 요청
                 .loginProcessingUrl("/account/login") // 로그인 인증 post 요청
-                .defaultSuccessUrl("/index");
+                .failureForwardUrl("/account/login/error") //인증 실패시 무조건 해당 주소로 이동(이전 요청 무시)
+//                .successForwardUrl("/mypage") // 인증 성공시 무조건 해당 주소로 이동(이전 요청 무시)
+                .defaultSuccessUrl("/index"); //돌아갈 경로가 없는 경우 해당 주소로 반환
     }
 }
