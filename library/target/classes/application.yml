@@ -16,3 +16,8 @@ spring:
 mybatis:
   mapper-locations:
     - /mappers/*.xml
+
+file:
+  path: E:/library/upload
+
+#C:/junil/web-3-202210/library/upload

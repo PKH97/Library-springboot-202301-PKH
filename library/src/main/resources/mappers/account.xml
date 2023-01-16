@@ -53,11 +53,11 @@
     </select>
     <select id="findUserByUserId" parameterType="Integer" resultMap="userMst">
         select
-        um.user_id,
-        um.username,
-        um.password,
-        um.name,
-        um.email,
+            um.user_id,
+            um.username,
+            um.password,
+            um.name,
+            um.email,
 
         rd.role_id,
         rm.role_name,
@@ -65,11 +65,11 @@
         um.create_date,
         um.update_date
         from
-        user_mst um
-        left outer join role_dtl rd on(rd.user_id = um.user_id)
-        left outer join role_mst rm on(rm.role_id = rd.role_id)
+            user_mst um
+            left outer join role_dtl rd on(rd.user_id = um.user_id)
+            left outer join role_mst rm on(rm.role_id = rd.role_id)
         where
-        um.user_id = #{userId}
+            um.user_id = #{userId}
     </select>
 
     <insert id="saveUser"
