@@ -5,7 +5,7 @@
 <mapper namespace="com.korit.library.repository.BookRepository">
    <select id="searchBook"
            parameterType="com.korit.library.web.dto.SearchReqDto"
-           resultType="com.korit.library.web.dto.BookMstDto">
+           resultType="com.korit.library.entity.BookMst">
        SELECT
             book_id as bookId,
             book_code as bookCode,
@@ -43,7 +43,7 @@
        </if>
    </select>
 
-    <select id="findBookByBookCode" resultType="com.korit.library.web.dto.BookMstDto">
+    <select id="findBookByBookCode" resultType="com.korit.library.entity.BookMst">
         SELECT
             book_id as bookId,
             book_code as bookCode,
@@ -58,7 +58,7 @@
             book_code = #{bookCode};
     </select>
 
-    <select id="findAllCategory" resultType="com.korit.library.web.dto.CategoryDto">
+    <select id="findAllCategory" resultType="com.korit.library.entity.CategoryView">
         select
             category_id,
             category
@@ -76,7 +76,6 @@
         update book_mst
         set
             book_name = #{bookName},
-            <!-- 공백시에 null 넣어주는 if문 -->
             author = if(#{author} = '', null, #{author}),
             publisher = if(#{publisher} = '', null, #{publisher}),
             publication_date = if(#{publicationDate} = '', null, #{publicationDate}),
@@ -84,4 +83,72 @@
         where
             book_code = #{bookCode}
     </update>
+
+    <update id="maintainUpdateBookByBookCode" parameterType="com.korit.library.web.dto.BookReqDto">
+        update book_mst
+<!--        trim 은 공백 제거에 사용된다. 여기서는 suffixOverrides 에 , 를 넣어 마지막 , 를 삭제해준다.-->
+<!--        <trim prefix="set" suffixOverrides=",">-->
+<!--            <if test="book">book_name = #{bookName},</if>-->
+<!--            <if test="book">book_name = #{bookName},</if>-->
+<!--            <if test="book">book_name = #{bookName},</if>-->
+<!--            <if test="book">book_name = #{bookName}</if>-->
+<!--        </trim>-->
+        set
+            book_name = #{bookName},
+            <!-- 공백시에 null 넣어주는 if문 -->
+            <if test='author != null and author != ""'>author = #{author},</if>
+            <if test='publisher != null and publisher != ""'>publisher = #{publisher},</if>
+            <if test='publicationDate != null and publicationDate'>publication_date = #{publicationDate},</if>
+            category = #{category}
+        where
+            book_code = #{bookCode}
+    </update>
+
+    <delete id="deleteBook">
+        delete
+        from
+            book_mst
+        where
+            book_code = #{bookCode}
+    </delete>
+
+    <insert id="registerBookImages" parameterType="list">
+        insert into book_image
+        values
+            <foreach collection="list" item="file" separator=",">
+                (0, #{file.bookCode}, #{file.saveName}, #{file.originName})
+            </foreach>
+    </insert>
+
+    <select id="findBookImageAll" resultType="com.korit.library.entity.BookImage">
+        select
+            image_id as imageId,
+            book_code as bookCode,
+            save_name as saveName,
+            origin_name as originName
+        from
+            book_image
+        where
+            book_code = #{bookCode}
+    </select>
+
+    <select id="findBookImageByImageId" resultType="com.korit.library.entity.BookImage">
+        select
+            image_id as imageId,
+            book_code as bookCode,
+            save_name as saveName,
+            origin_name as originName
+        from
+            book_image
+        where
+            image_id = #{imageId}
+    </select>
+
+    <delete id="deleteBookImages">
+        delete
+        from
+            book_image
+        where
+            image_id = #{imageId};
+    </delete>
 </mapper>
