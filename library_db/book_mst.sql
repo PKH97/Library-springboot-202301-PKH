@@ -25,5 +25,28 @@ order by
     publication_date desc,
 	book_id
 #limit 0, 20
+;
+
+
+create view test as
+select
+	username,
+    name
+from
+	user_mst;
+
+
+create view categorycategory_view_view as
+select
+	row_number() over(order by category) as category_id,
+    category
+from
+	book_mst
+group by
+	category;
+    
+
+drop view test;
+    
 
 
