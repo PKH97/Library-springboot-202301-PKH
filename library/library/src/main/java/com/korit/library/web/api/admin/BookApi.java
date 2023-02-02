@@ -17,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Map;
 
 @Api(tags = {"관리자 도서관리 API"})
 @RequestMapping("/api/admin")
@@ -26,6 +27,13 @@ public class BookApi {
 
     @Autowired
     private BookService bookService;
+
+    @GetMapping("/book/{bookCode}")
+    public ResponseEntity<CMRespDto<Map<String, Object>>> getBook(@PathVariable String bookCode) {
+        return ResponseEntity
+                .ok()
+                .body(new CMRespDto<>(HttpStatus.OK.value(),"Successfully", bookService.getBookAndImage(bookCode)));
+    }
 
     @ParamsAspect
     @ValidAspect
@@ -118,7 +126,16 @@ public class BookApi {
     }// List 로 만들었기 때문에 이미지 추가(add) 할 수 있다.
 
     @ParamsAspect
-    @GetMapping("/book.{bookCode}/images")
+    @PostMapping("/book/{bookCode}/images/modification")
+    public ResponseEntity<CMRespDto<?>> modifyBookImg(@PathVariable String bookCode, @RequestPart List<MultipartFile> files) {
+        bookService.registerBookImages(bookCode, files);
+        return ResponseEntity
+                .ok()
+                .body(new CMRespDto<>(HttpStatus.OK.value(), "Successfully", true));
+    }
+
+    @ParamsAspect
+    @GetMapping("/book/{bookCode}/images")
     public ResponseEntity<CMRespDto<List<BookImage>>> getImages(@PathVariable String bookCode){
         List<BookImage> bookImagesDtos = bookService.getBooks(bookCode);
         return ResponseEntity
@@ -135,16 +152,3 @@ public class BookApi {
                 .body(new CMRespDto<>(HttpStatus.OK.value(), "Successfully", null));
     }
 }
-/*
-[DB]
-name = "홍길동'
-age = 30
-
-putMapping() 빈값, null 값 전부 다 수정o
-name = ""
-age = ""
-
-patchMapping() 빈값, null 값 전부 다 수정 x
-name = ""
-age = ""
- */

@@ -29,6 +29,7 @@ public interface BookRepository {
 
     public List<BookImage> findBookImageAll(String bookCode); //이미지 들오기
     public BookImage findBookImageByImageId(int imageId);
+    public BookImage findBookImageByBookCode(String bookCode);
 
     public int deleteBookImages(int imageId);//이미지 삭제
 }

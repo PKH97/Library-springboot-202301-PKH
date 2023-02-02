@@ -120,13 +120,6 @@
 
     <update id="maintainUpdateBookByBookCode" parameterType="com.korit.library.web.dto.BookReqDto">
         update book_mst
-    <!--        trim 은 공백 제거에 사용된다. 여기서는 suffixOverrides 에 , 를 넣어 마지막 , 를 삭제해준다.-->
-    <!--        <trim prefix="set" suffixOverrides=",">-->
-    <!--            <if test="book">book_name = #{bookName},</if>-->
-    <!--            <if test="book">book_name = #{bookName},</if>-->
-    <!--            <if test="book">book_name = #{bookName},</if>-->
-    <!--            <if test="book">book_name = #{bookName}</if>-->
-    <!--        </trim>-->
         set
             book_name = #{bookName},
             <!-- 공백시에 null 넣어주는 if문 -->
@@ -187,6 +180,18 @@
             book_image
         where
             image_id = #{imageId}
+    </select>
+
+    <select id="findBookImageByBookCode" resultType="com.korit.library.entity.BookImage">
+        select
+            image_id as imageId,
+            book_code as bookCode,
+            save_name as saveName,
+            origin_name as originName
+        from
+            book_image
+        where
+            book_code = #{bookCode}
     </select>
 
     <delete id="deleteBookImages">
