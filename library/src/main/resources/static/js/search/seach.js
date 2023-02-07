@@ -1,10 +1,17 @@
 window.onload = () => {
+    HeaderService.getInstance().loadHeader();
+
     SearchService.getInstance().clearBookList();
-    SearchService.getInstance().loadSearchBook();
-    SearchService.getInstance().loadCategosies();
+    SearchService.getInstance().loadSearchBooks();
+    SearchService.getInstance().loadCategories();
+    SearchService.getInstance().setMaxPage();
 
     ComponentEvent.getInstance().addClickEventCategoryCheckboxs();
+    ComponentEvent.getInstance().addScrollEventPaging();
+    ComponentEvent.getInstance().addClickEventSearchButton();
 }
+
+let maxPage = 0;
 
 const searchObj = {
     page: 1,
@@ -12,8 +19,6 @@ const searchObj = {
     categories: new Array(),
     count: 10
 }
-
-
 
 class SearchApi {
     static #instance = null;
@@ -94,8 +99,15 @@ class SearchService {
         }
         return this.#instance;
     }
+
+    setMaxPage() {
+        const totalCount = SearchApi.getInstance().getTotalCount();
+        maxPage = totalCount % 10 == 0 
+            ? totalCount / 10 
+            : Math.floor(totalCount / 10) + 1; 
+    }
     
-    loadCategosies() {
+    loadCategories() {
         const categoryList = document.querySelector('.category-list');
         categoryList.innerHTML = ``;
 
@@ -115,7 +127,7 @@ class SearchService {
         contentFlex.innerHTML = "";
     }
 
-    loadSearchBook() {
+    loadSearchBooks() {
         const responseData = SearchApi.getInstance().searchBook();
         const contentFlex = document.querySelector('.content-flex');
 
@@ -150,6 +162,8 @@ class SearchService {
 
 
 
+
+
 class ComponentEvent {
     static #instance = null;
     static getInstance() {
@@ -170,11 +184,42 @@ class ComponentEvent {
                     const index = searchObj.categories.indexOf(checkbox.value);
                     searchObj.categories.splice(index, 1);
                 }
-                console.log(searchObj.categories);
+                document.querySelector('.search-button').click(); //체크박스 클릭시 바로 정보 들고옴
             }
         });
     }
+
+    addScrollEventPaging() {
+        const html = document.querySelector('html');
+        const body = document.querySelector('body');
+
+        body.onscroll = () => {
+            const scrollPosition = body.offsetHeight - html.clientHeight - html.scrollTop;
+
+            if(scrollPosition < 250 && searchObj.page < maxPage) {
+                searchObj.page++;
+                SearchService.getInstance().loadSearchBooks();
+            }
+        }
+    }
+
+    addClickEventSearchButton() {
+        const searchButton = document.querySelector('.search-button');
+        const searchInput = document.querySelector('.search-input');
+
+        searchButton.onclick = () => {
+            searchObj.searchValue = searchInput.value;
+            searchObj.page = 1;
+            window.scrollTo(0, 0); //-> x축과 y축
+            SearchService.getInstance().clearBookList();
+            SearchService.getInstance().setMaxPage();
+            SearchService.getInstance().loadSearchBooks();
+        }
+
+        searchInput.onkeyup = () => {
+            if(window.event.leyCode == 13) {
+                searchButton.click();
+            }
+        }
+    }
 }
-
-
-

@@ -11,6 +11,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class SearchService {
+
     private final SearchRepository searchRepository;
 
     public int getSearchTotalCount(SearchBookReqDto searchBookReqDto) {
@@ -21,4 +22,12 @@ public class SearchService {
         searchBookReqDto.setIndex();
         return searchRepository.userSearchBook(searchBookReqDto);
     }
+
+
 }
+
+
+
+
+
+

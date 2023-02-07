@@ -5,6 +5,7 @@ import com.korit.library.service.SearchService;
 import com.korit.library.web.dto.CMRespDto;
 import com.korit.library.web.dto.SearchBookReqDto;
 import lombok.RequiredArgsConstructor;
+import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,8 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequiredArgsConstructor
 @RequestMapping("/api")
+@RequiredArgsConstructor
 public class SearchApi {
 
     private final SearchService searchService;
@@ -28,11 +29,22 @@ public class SearchApi {
 
     @ParamsAspect
     @GetMapping("/search/totalcount")
-    public ResponseEntity<CMRespDto<Integer>> getSearchTotalCount(SearchBookReqDto searchBookReqDto) {
+    public ResponseEntity<CMRespDto<Integer>> getSearchBookTotalCount(SearchBookReqDto searchBookReqDto) {
         return ResponseEntity.ok()
                 .body(new CMRespDto<>(HttpStatus.OK.value(),
-                            "Successfully",
-                                    searchService.getSearchTotalCount(searchBookReqDto)));
+                        "Successfully",
+                        searchService.getSearchTotalCount(searchBookReqDto)));
     }
 
 }
+
+
+
+
+
+
+
+
+
+
+

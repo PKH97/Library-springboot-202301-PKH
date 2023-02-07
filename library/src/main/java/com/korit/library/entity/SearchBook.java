@@ -20,6 +20,7 @@ public class SearchBook {
     private String saveName;
     private int rentalDtlId;
     private LocalDate returnDate;
+    private int likeCount;
     private int userId;
 }
 //bl.like_id,

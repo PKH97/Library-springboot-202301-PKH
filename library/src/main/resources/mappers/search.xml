@@ -14,7 +14,7 @@
         where
         1 = 1
         <if test="searchValue != null and searchValue != ''">
-            (book_name like concat('%', #{searchValue}, '%')
+            and (book_name like concat('%', #{searchValue}, '%')
             or author like concat('%', #{searchValue}, '%')
             or publisher like concat('%', #{searchValue}, '%'))
         </if>
@@ -51,7 +51,7 @@
             left outer join rental_mst rm
                 on(rm.rental_id = rd.rental_id and rm.user_id = #{userId})
             left outer join book_like bl
-                on(bl.book_id = bm.book_id and bl.user_id = #{userId})
+                on(bl.book_id = bm.book_id and bl.user_id = '2')
             left outer join (select
                                 book_id,
                                 count(book_id) as like_count
@@ -60,9 +60,9 @@
                             group by
                                 book_id) lc on(lc.book_id = bm.book_id)
         where
-        1 = 1
+            1 = 1
         <if test="searchValue != null and searchValue != ''">
-            (bm.book_name like concat('%', #{searchValue}, '%')
+            and (bm.book_name like concat('%', #{searchValue}, '%')
             or bm.author like concat('%', #{searchValue}, '%')
             or bm.publisher like concat('%', #{searchValue}, '%'))
         </if>
