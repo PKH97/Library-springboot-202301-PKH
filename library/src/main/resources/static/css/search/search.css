@@ -202,6 +202,14 @@
     background-color: #202020;
 }
 
+.return-button {
+    background-color: #0a7cff;
+}
+
 .like-button {
     background-color: #10005e;
+}
+
+.dislike-button {
+    background-color: #820027;
 }
