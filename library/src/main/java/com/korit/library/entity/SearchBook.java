@@ -23,5 +23,3 @@ public class SearchBook {
     private int likeCount;
     private int userId;
 }
-//bl.like_id,
-//        lc.like_count
