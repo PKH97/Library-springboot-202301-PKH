@@ -37,6 +37,10 @@
 			<artifactId>spring-boot-starter-security</artifactId>
 		</dependency>
 		<!-- 시큐리티 mvn -> 로그인을 하지 않으면 접근이 금지되게 한다. -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-oauth2-client</artifactId>
+		</dependency>
 
 		<dependency>
 			<groupId>org.mybatis.spring.boot</groupId>

@@ -1,5 +1,7 @@
 package com.korit.library.config;
 
+import com.korit.library.security.PrincipalOAuth2DetailsService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,7 +13,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @EnableWebSecurity
 @Configuration
+@RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter{
+
+    private final PrincipalOAuth2DetailsService principalOAuth2DetailsService;
 
     @Bean
     public BCryptPasswordEncoder passwordEncoder(){
@@ -42,6 +47,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
                 .loginProcessingUrl("/account/login") // 로그인 인증 post 요청
                 .failureForwardUrl("/account/login/error") //인증 실패시 무조건 해당 주소로 이동(이전 요청 무시)
 //                .successForwardUrl("/mypage") // 인증 성공시 무조건 해당 주소로 이동(이전 요청 무시)
+                // 구글 로그인 0210
+                .and()
+                .oauth2Login()
+                .userInfoEndpoint()
+                .userService(principalOAuth2DetailsService)
+                .and()
                 .defaultSuccessUrl("/index"); //돌아갈 경로가 없는 경우 해당 주소로 반환
     }
 }

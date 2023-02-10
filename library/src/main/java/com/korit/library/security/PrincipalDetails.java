@@ -8,6 +8,8 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.oauth2.core.user.OAuth2User;
+import springfox.documentation.service.OAuth;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -16,7 +18,7 @@ import java.util.Map;
 
 @RequiredArgsConstructor
 @AllArgsConstructor
-public class PrincipalDetails implements UserDetails {
+public class PrincipalDetails implements UserDetails, OAuth2User {
 
     @Getter
     private final UserMst user;
@@ -88,5 +90,17 @@ public class PrincipalDetails implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+
+    // OAuth 의 오버라이드
+    @Override
+    public String getName() {
+        return user.getName();
+    }
+
+    @Override
+    public Map<String, Object> getAttributes() { //유저정보가 다 들어있음. 중요함
+        return response;
     }
 }

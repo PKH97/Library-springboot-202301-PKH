@@ -46,12 +46,12 @@ class BookModificationApi {
         $.ajax({
             async: false,
             type: "get",
-            url: `http://127.0.0.1:8000/api/admin/book/${bookObj.bookCode}`,
+            url: `http://localhost:8000/api/admin/book/${bookObj.bookCode}`,
             dataType: "json",
             success: response => {
                 responseData = response.data;
             },
-            error: error => {
+            errror: error => {
                 console.log(error);
             }
         });
@@ -65,7 +65,7 @@ class BookModificationApi {
         $.ajax({
             async: false,
             type: "get",
-            url: "http://127.0.0.1:8000/api/admin/categories",
+            url: "http://localhost:8000/api/admin/categories",
             dataType: "json",
             success: response => {
                 responseData = response.data;
@@ -84,7 +84,7 @@ class BookModificationApi {
         $.ajax({
             async: false,
             type: "put",
-            url: `http://127.0.0.1:8000/api/admin/book/${bookObj.bookCode}`,
+            url: `http://localhost:8000/api/admin/book/${bookObj.bookCode}`,
             contentType: "application/json",
             data: JSON.stringify(bookObj),
             dataType: "json",
@@ -106,10 +106,10 @@ class BookModificationApi {
         $.ajax({
             async: false,
             type: "delete",
-            url: `http://127.0.0.1:8000/api/admin/book/${bookObj.bookCode}/image/${imgObj.imageId}`,
+            url: `http://localhost:8000/api/admin/book/${bookObj.bookCode}/image/${imgObj.imageId}`,
             dataType: "json",
             success: response => {
-                successFlag = true;
+                successFlag = ture;
             },
             error: error => {
                 console.log(error);
@@ -124,7 +124,7 @@ class BookModificationApi {
         $.ajax({
             async: false,
             type: "post",
-            url: `http://127.0.0.1:8000/api/admin/book/${bookObj.bookCode}/images`,
+            url: `http://localhost:8000/api/admin/book/${bookObj.bookCode}/images`,
             encType: "multipart/form-data",
             contentType: false,
             processData: false,
@@ -137,7 +137,7 @@ class BookModificationApi {
             error: error => {
                 console.log(error);
             }
-        })
+        });
     }
 
 }
@@ -153,7 +153,7 @@ class BookModificationService {
 
     setBookCode() {
         const URLSearch = new URLSearchParams(location.search);
-        bookObj.bookCode = URLSearch.get("bookCode");
+        bookObj.bookCode = URLSearch.get("bookCode"); //-> 객체의 정보를 가져오는 방식
     }
 
     setBookObjValues() {
@@ -184,14 +184,14 @@ class BookModificationService {
         modificationInputs[4].value = responseData.bookMst.publicationDate;
         modificationInputs[5].value = responseData.bookMst.category;
 
-        if(responseData.bookImage != null){
+        if(responseData.bookImage != null) {
             imgObj.imageId = responseData.bookImage.imageId;
             imgObj.bookCode = responseData.bookImage.bookCode;
             imgObj.saveName = responseData.bookImage.saveName;
             imgObj.originName = responseData.bookImage.originName;
 
             const bookImg = document.querySelector(".book-img");
-            bookImg.src = `http://127.0.0.1:8000/image/book/${responseData.bookImage.saveName}`;
+            bookImg.src = `http://localhost:8000/image/book/${responseData.bookImage.saveName}`;
         }
     }
 
@@ -344,7 +344,7 @@ class ComponentEvent {
             if(successFlag) {
                 BookModificationApi.getInstance().registerImg();
             }
-            
+
         }
     }
 
@@ -352,7 +352,7 @@ class ComponentEvent {
         const imgCancelButton = document.querySelector(".img-cancel-button");
 
         imgCancelButton.onclick = () => {
-            if(confirm("정말로 이미지 수정을 취소하시겠습니까?")) {
+            if(confirm("정말로 이미지를 수정하시겠습니까?")) {
                 location.reload();
             }
         }
